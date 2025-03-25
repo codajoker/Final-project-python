@@ -1,3 +1,6 @@
+from src.storage.storage_manager import StorageManager
+
+
 def parse_input(user_input):
     cmd, *args = user_input.split()
     cmd = cmd.strip().lower()
@@ -5,6 +8,9 @@ def parse_input(user_input):
 
 
 def main():
+    storage_manager = StorageManager()
+    # StorageManager object has get_contact_storage() and get_note_storage() methods that return Storage objects for contacts and notes respectively
+
     # contacts = AddressBook()
 
     print("Welcome to the assistant bot!")

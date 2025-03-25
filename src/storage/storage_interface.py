@@ -15,5 +15,13 @@ class StorageInterface(ABC):
         pass
 
     @abstractmethod
+    def update(self, old_item, new_item):
+        pass
+
+    @abstractmethod
     def remove(self, item):
+        pass
+
+    @abstractmethod
+    def get_all(self):
         pass
