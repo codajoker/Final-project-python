@@ -14,6 +14,9 @@ class Storage(StorageInterface):
         self.file_path = self._get_file_path(file_type)
         self.data = None
 
+    def __del__(self):
+        self.save_data()
+
     def _get_file_path(self, file_type):
         if file_type not in self.FILE_PATHS:
             raise ValueError("Invalid file type. Use 'contacts' or 'notes'.")
