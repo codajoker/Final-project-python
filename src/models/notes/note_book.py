@@ -6,7 +6,7 @@ class NoteBook(UserList):
     def add_note(self, note):
         element = find_element(self.data, lambda x: x.name == note.name)
         if not element:
-            self.data.appent(note)
+            self.data.append(note)
         else:
             raise KeyError("Note with such name already exists.")
 
