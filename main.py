@@ -1,5 +1,6 @@
-from src.bot import main
+from src.bot import AssistantBot
 
 
 if __name__ == "__main__":
-    main()
+    bot = AssistantBot()
+    bot.run()
