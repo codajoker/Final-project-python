@@ -2,7 +2,7 @@ from collections import UserDict
 from datetime import date, datetime
 
 
-class AddressBook(UserDict):
+class СontactBook(UserDict):
     def add_record(self, record):
         self.data[record.name.value] = record
 
