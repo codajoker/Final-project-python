@@ -7,42 +7,47 @@ from src.storage.storage_manager import StorageManager
 from src.utils.command_suggester import CommandSuggester
 from prompt_toolkit import PromptSession
 from prompt_toolkit.styles import Style
-from src.commands.contact_commands import (
-    add_contact, find_contact, edit_contact, delete_contact,
-    add_birthday, show_birthday, upcoming_birthdays, all_contacts
-)
-from src.models.contact.contact_book import СontactBook
+from src.commands.contact_commands import ContactCommands
+from src.models.contact.contact_book import ContactBook
 
 
 class AssistantBot:
     def __init__(self):
         self.storage_manager = StorageManager()
-        # self.contacts_book
+
+        # Notes
         self.notes_book = self.storage_manager.get_note_storage()
-        
-        # Initialize the contact book
-        self.contacts_book = СontactBook()
-        # Load contacts from storage if available
-        # contact_storage = self.storage_manager.get_contact_storage()
-        # for contact in contact_storage.get_all():
-        #     self.contacts_book.add_record(contact)
-        
+
+        # Contacts
+        self.contact_storage = self.storage_manager.get_contact_storage()
+        self.contacts_book = ContactBook()
+
+        # Load existing contacts from storage
+        for stored_contact in self.contact_storage.get_all():
+            self.contacts_book.add_record(stored_contact)
+
+        self.contacts_commands = ContactCommands(
+            self.contacts_book, self.contact_storage
+        )
+
         self.command_suggester = CommandSuggester()
-        
-        self.style = Style.from_dict({
-            'prompt': 'ansicyan bold',
-        })
-        
+
+        self.style = Style.from_dict(
+            {
+                "prompt": "ansicyan bold",
+            }
+        )
+
         self.session = PromptSession(
             completer=self.command_suggester.completer,
             style=self.style,
-            complete_while_typing=True
+            complete_while_typing=True,
         )
 
     def _parse_input(self, user_input):
         if not user_input.strip():
             return "", []
-        
+
         cmd, *args = user_input.split()
         cmd = cmd.strip().lower()
         return cmd, args
@@ -53,15 +58,17 @@ class AssistantBot:
 
     def _suggest_command(self, user_input):
         suggested_command = self.command_suggester.suggest_command(user_input)
-        
+
         if suggested_command:
-            description = self.command_suggester.get_command_description(suggested_command)
+            description = self.command_suggester.get_command_description(
+                suggested_command
+            )
             print(f"Did you mean '{suggested_command}' ({description})?")
             user_response = input("Use this command? (yes/no): ").strip().lower()
-            
+
             if user_response in ["yes", "y"]:
                 return suggested_command
-        
+
         return None
 
     def run(self):
@@ -70,7 +77,7 @@ class AssistantBot:
         while True:
             try:
                 user_input = self.session.prompt("Command > ")
-                
+
                 command, args = self._parse_input(user_input)
 
                 if not command:
@@ -87,21 +94,21 @@ class AssistantBot:
                         desc = self.command_suggester.get_command_description(cmd)
                         print(f"  - {cmd}: {desc}")
                 elif command == "add-contact":
-                    print(add_contact(args, self.contacts_book))
+                    print(self.contacts_commands.add_contact(args))
                 elif command == "find-contact":
-                    print(find_contact(args, self.contacts_book))
+                    print(self.contacts_commands.find_contact(args))
                 elif command == "edit-contact":
-                    print(edit_contact(args, self.contacts_book))
+                    print(self.contacts_commands.edit_contact(args))
                 elif command == "delete-contact":
-                    print(delete_contact(args, self.contacts_book))
+                    print(self.contacts_commands.delete_contact(args))
                 elif command == "add-birthday":
-                    print(add_birthday(args, self.contacts_book))
+                    print(self.contacts_commands.add_birthday(args))
                 elif command == "show-birthday":
-                    print(show_birthday(args, self.contacts_book))
+                    print(self.contacts_commands.show_birthday(args))
                 elif command == "upcoming-birthdays":
-                    print(upcoming_birthdays(args, self.contacts_book))
+                    print(self.contacts_commands.upcoming_birthdays(args))
                 elif command == "all-contacts":
-                    print(all_contacts(args, self.contacts_book))
+                    print(self.contacts_commands.all_contacts(args))
                 elif command == "add-note":
                     print("Adding note...")
                     print(add_note(args, self.notes_book))
@@ -123,10 +130,10 @@ class AssistantBot:
                     print(self.notes_book)
                 else:
                     suggested_command = self._suggest_command(user_input)
-                    
+
                     if suggested_command:
                         print(f"Running '{suggested_command}'...")
-                        
+
                         if suggested_command in ["close", "exit"]:
                             print("Good bye!")
                             break
@@ -134,7 +141,9 @@ class AssistantBot:
                             print("How can I help you?")
                             print("Available commands:")
                             for cmd in self.command_suggester.available_commands:
-                                desc = self.command_suggester.get_command_description(cmd)
+                                desc = self.command_suggester.get_command_description(
+                                    cmd
+                                )
                                 print(f"  - {cmd}: {desc}")
                         elif suggested_command == "add-contact":
                             print(add_contact(args, self.contacts_book))

@@ -1,8 +1,7 @@
 from collections import UserDict
-from datetime import date, datetime
 
 
-class СontactBook(UserDict):
+class ContactBook(UserDict):
     def add_record(self, record):
         self.data[record.name.value] = record
 
