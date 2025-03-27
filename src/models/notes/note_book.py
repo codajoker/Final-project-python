@@ -1,18 +1,18 @@
 from collections import UserList
-
 from src.utils.find_elements import find_element
+
 
 class NoteBook(UserList):
     def add_note(self, note):
-        element = find_element(self.data, lambda x: x.name == note.name)
+        element = find_element(self.data, lambda x: x.title.value == note.title.value)
         if not element:
             self.data.append(note)
         else:
-            raise KeyError("Note with such name already exists.")
+            raise KeyError("Note with such title already exists.")
 
-    def delete_note(self, name):
-        element = find_element(self.data, lambda x: x.name == name)
+    def delete_note(self, title):
+        element = find_element(self.data, lambda x: x.title.value == title)
         if element:
-            self.data.pop(element)
+            self.data = list(filter(lambda x: x.title.value != title, self.data))
         else:
-            raise KeyError("Note with such name was not found.")
+            raise KeyError("Note with such title doesn't exist.")
