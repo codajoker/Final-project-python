@@ -1,4 +1,4 @@
-import src.models.contact.field as Field
+from src.models.contact.field import Field
 
 
 class Comments(Field):
