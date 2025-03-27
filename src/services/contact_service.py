@@ -1,6 +1,4 @@
-from datetime import date, datetime
 from src.models.contact.contact import Contact
-from src.models.contact.contact_book import СontactBook
 
 
 class ContactService:
