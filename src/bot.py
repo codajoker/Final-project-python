@@ -1,18 +1,28 @@
-from src.models.notes.note_book import NoteBook
 from src.commands.notes.delete_note import delete_note
 from src.commands.notes.add_note import add_note
 from src.storage.storage_manager import StorageManager
 from src.utils.command_suggester import CommandSuggester
 from prompt_toolkit import PromptSession
 from prompt_toolkit.styles import Style
+from src.commands.contact_commands import (
+    add_contact, find_contact, edit_contact, delete_contact,
+    add_birthday, show_birthday, upcoming_birthdays, all_contacts
+)
+from src.services.contact_service import AddressBook
 
 
 class AssistantBot:
     def __init__(self):
         self.storage_manager = StorageManager()
-        # self.contacts_book
         self.notes_book = self.storage_manager.get_note_storage()
-        # self.notes_book = NoteBook()
+        
+        # Initialize the contact book as an AddressBook
+        self.contacts_book = AddressBook()
+        # Load contacts from storage if available
+        # contact_storage = self.storage_manager.get_contact_storage()
+        # for contact in contact_storage.get_all():
+        #     self.contacts_book.add_record(contact)
+        
         self.command_suggester = CommandSuggester()
         
         self.style = Style.from_dict({
@@ -73,21 +83,21 @@ class AssistantBot:
                         desc = self.command_suggester.get_command_description(cmd)
                         print(f"  - {cmd}: {desc}")
                 elif command == "add-contact":
-                    print("Adding contact...")
+                    print(add_contact(args, self.contacts_book))
                 elif command == "find-contact":
-                    print("Finding contact...")
+                    print(find_contact(args, self.contacts_book))
                 elif command == "edit-contact":
-                    print("Editing contact...")
+                    print(edit_contact(args, self.contacts_book))
                 elif command == "delete-contact":
-                    print("Deleting contact...")
+                    print(delete_contact(args, self.contacts_book))
                 elif command == "add-birthday":
-                    print("Adding birthday...")
+                    print(add_birthday(args, self.contacts_book))
                 elif command == "show-birthday":
-                    print("Showing birthday...")
+                    print(show_birthday(args, self.contacts_book))
                 elif command == "upcoming-birthdays":
-                    print("Showing upcoming birthdays...")
+                    print(upcoming_birthdays(args, self.contacts_book))
                 elif command == "all-contacts":
-                    print("Showing all contacts...")
+                    print(all_contacts(args, self.contacts_book))
                 elif command == "add-note":
                     print("Adding note...")
                     print(add_note(args, self.notes_book))
@@ -104,7 +114,7 @@ class AssistantBot:
                     print("Removing tag...")
                 elif command == "all-notes":
                     print("Showing all notes...")
-                    print(self.notes_book.data)
+                    print(self.notes_book)
                 else:
                     suggested_command = self._suggest_command(user_input)
                     
