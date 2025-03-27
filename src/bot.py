@@ -1,3 +1,6 @@
+from src.commands.notes.edit_note import edit_note
+from src.commands.notes.find_note import find_note
+from src.models.notes.note_book import NoteBook
 from src.commands.notes.delete_note import delete_note
 from src.commands.notes.add_note import add_note
 from src.storage.storage_manager import StorageManager
@@ -107,8 +110,10 @@ class AssistantBot:
                     print(delete_note(args, self.notes_book))
                 elif command == "find-note":
                     print("Finding note...")
+                    print(find_note(args, self.notes_book))
                 elif command == "edit-note":
                     print("Editing note...")
+                    print(edit_note(args, self.notes_book))
                 elif command == "add-tag":
                     print("Adding tag...")
                 elif command == "remove-tag":
@@ -155,8 +160,10 @@ class AssistantBot:
                             print(delete_note(args, self.notes_book))
                         elif suggested_command == "find-note":
                             print("Finding note...")
+                            print(find_note(args, self.notes_book))
                         elif suggested_command == "edit-note":
                             print("Editing note...")
+                            print(edit_note(args, self.notes_book))
                         elif suggested_command == "add-tag":
                             print("Adding tag...")
                         elif suggested_command == "remove-tag":
