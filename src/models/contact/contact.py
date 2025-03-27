@@ -12,7 +12,12 @@ from src.models.contact.comments import Comments
 
 class Contact:
     def __init__(
-        self, name, phones=[], email="", birthday=None, adress="", comments=""
+        self,
+        name,
+        phones=[],
+        email="",
+        birthday=None,
+        adress="",
     ):
         self.name = Name(name)
         self.phones = phones
