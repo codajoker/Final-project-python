@@ -5,3 +5,5 @@ mypy-extensions==1.0.0
 packaging==24.2
 pathspec==0.12.1
 platformdirs==4.3.7
+prompt-toolkit==3.0.43
+wcwidth==0.2.13
