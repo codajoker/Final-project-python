@@ -121,7 +121,49 @@ class AssistantBot:
                     
                     if suggested_command:
                         print(f"Running '{suggested_command}'...")
-                        print(f"Command '{suggested_command}' executed.")
+                        
+                        if suggested_command in ["close", "exit"]:
+                            print("Good bye!")
+                            break
+                        elif suggested_command == "hello":
+                            print("How can I help you?")
+                            print("Available commands:")
+                            for cmd in self.command_suggester.available_commands:
+                                desc = self.command_suggester.get_command_description(cmd)
+                                print(f"  - {cmd}: {desc}")
+                        elif suggested_command == "add-contact":
+                            print(add_contact(args, self.contacts_book))
+                        elif suggested_command == "find-contact":
+                            print(find_contact(args, self.contacts_book))
+                        elif suggested_command == "edit-contact":
+                            print(edit_contact(args, self.contacts_book))
+                        elif suggested_command == "delete-contact":
+                            print(delete_contact(args, self.contacts_book))
+                        elif suggested_command == "add-birthday":
+                            print(add_birthday(args, self.contacts_book))
+                        elif suggested_command == "show-birthday":
+                            print(show_birthday(args, self.contacts_book))
+                        elif suggested_command == "upcoming-birthdays":
+                            print(upcoming_birthdays(args, self.contacts_book))
+                        elif suggested_command == "all-contacts":
+                            print(all_contacts(args, self.contacts_book))
+                        elif suggested_command == "add-note":
+                            print("Adding note...")
+                            print(add_note(args, self.notes_book))
+                        elif suggested_command == "delete-note":
+                            print("Deleting note...")
+                            print(delete_note(args, self.notes_book))
+                        elif suggested_command == "find-note":
+                            print("Finding note...")
+                        elif suggested_command == "edit-note":
+                            print("Editing note...")
+                        elif suggested_command == "add-tag":
+                            print("Adding tag...")
+                        elif suggested_command == "remove-tag":
+                            print("Removing tag...")
+                        elif suggested_command == "all-notes":
+                            print("Showing all notes...")
+                            print(self.notes_book)
                     else:
                         print("Unknown command. Try typing 'hello' for help.")
             except KeyboardInterrupt:
