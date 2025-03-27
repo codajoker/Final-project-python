@@ -64,13 +64,12 @@ class ContactService:
             
             elif field == "phone":
                 if contact.phones:
-                    contact.phones[0].value = new_value
-                else:
-                    contact.add_phone(new_value)
+                    contact.phones.pop(0)
+                contact.add_phone(new_value)
                 return f"Phone number updated for contact '{name}'."
             
             elif field == "email":
-                contact.email = new_value
+                contact.add_email(new_value)
                 return f"Email updated for contact '{name}'."
             
             elif field == "birthday":

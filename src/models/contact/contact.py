@@ -37,16 +37,21 @@ class Contact:
         return self.birthday.value if self.birthday else None
 
     def add_phone(self, phone):
-        if not self.find_phone(phone):
-            self.phones.append(Phone(phone))
-        else:
-            raise KeyError("Phone already exists.")
+        try:
+            phone_obj = Phone(phone)
+            if not self.find_phone(phone_obj.value):
+                self.phones.append(phone_obj)
+            else:
+                raise ValueError("This phone number already exists for this contact")
+        except ValueError as e:
+            raise ValueError(str(e))
 
     def add_email(self, email):
-        if not self.find_email(email):
-            self.phones.append(Email(email))
-        else:
-            raise KeyError("Phone already exists.")
+        try:
+            email_obj = Email(email)
+            self.email = email_obj
+        except ValueError as e:
+            raise ValueError(str(e))
 
     def find_phone(self, phone):
         return find_element(self.phones, lambda x: x.value == phone)
