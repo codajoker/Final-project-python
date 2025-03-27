@@ -1,4 +1,4 @@
-from src.services.contact_service import ContactService, AddressBook
+from src.services.contact_service import ContactService
 
 
 def add_contact(args, contact_book):

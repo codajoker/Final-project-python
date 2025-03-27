@@ -8,16 +8,17 @@ from src.commands.contact_commands import (
     add_contact, find_contact, edit_contact, delete_contact,
     add_birthday, show_birthday, upcoming_birthdays, all_contacts
 )
-from src.services.contact_service import AddressBook
+from src.models.contact.contact_book import СontactBook
 
 
 class AssistantBot:
     def __init__(self):
         self.storage_manager = StorageManager()
+        # self.contacts_book
         self.notes_book = self.storage_manager.get_note_storage()
         
-        # Initialize the contact book as an AddressBook
-        self.contacts_book = AddressBook()
+        # Initialize the contact book
+        self.contacts_book = СontactBook()
         # Load contacts from storage if available
         # contact_storage = self.storage_manager.get_contact_storage()
         # for contact in contact_storage.get_all():
