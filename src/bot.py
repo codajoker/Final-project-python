@@ -1,3 +1,4 @@
+from src.models.notes.note_book import NoteBook
 from src.commands.notes.delete_note import delete_note
 from src.commands.notes.add_note import add_note
 from src.storage.storage_manager import StorageManager
@@ -11,6 +12,7 @@ class AssistantBot:
         self.storage_manager = StorageManager()
         # self.contacts_book
         self.notes_book = self.storage_manager.get_note_storage()
+        # self.notes_book = NoteBook()
         self.command_suggester = CommandSuggester()
         
         self.style = Style.from_dict({
@@ -102,7 +104,7 @@ class AssistantBot:
                     print("Removing tag...")
                 elif command == "all-notes":
                     print("Showing all notes...")
-                    print(self.notes_book)
+                    print(self.notes_book.data)
                 else:
                     suggested_command = self._suggest_command(user_input)
                     
