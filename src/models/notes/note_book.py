@@ -1,4 +1,5 @@
 from collections import UserList
+from src.models.notes.title import Title
 from src.models.notes.text import Text
 from src.utils.find_elements import find_element
 
@@ -28,10 +29,13 @@ class NoteBook(UserList):
         else:
             raise KeyError("Note with such title doesn't exist.")
         
-    def edit_note(self, title, new_text):
+    def edit_note(self, title, field, new_value):
         element = self._find_element(title)
         if element:
-            element.text = Text(new_text)
+            if field == 'title':
+                element.title = Title(new_value)
+            else:
+                element.text = Text(new_value)
         else:
             raise KeyError("Note with such title doesn't exist.")
         
