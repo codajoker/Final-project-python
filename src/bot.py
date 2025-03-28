@@ -1,8 +1,5 @@
-from src.commands.notes.edit_note import edit_note
-from src.commands.notes.find_note import find_note
+from src.commands.note_commands import NoteCommands
 from src.models.notes.note_book import NoteBook
-from src.commands.notes.delete_note import delete_note
-from src.commands.notes.add_note import add_note
 from src.storage.storage_manager import StorageManager
 from src.utils.command_suggester import CommandSuggester
 from prompt_toolkit import PromptSession
@@ -16,7 +13,12 @@ class AssistantBot:
         self.storage_manager = StorageManager()
 
         # Notes
-        self.notes_book = self.storage_manager.get_note_storage()
+        self.notes_storage = self.storage_manager.get_note_storage()
+        self.notes_book = NoteBook(storage=self.notes_storage)
+
+        self.notes_commands = NoteCommands(
+            self.notes_book, self.notes_storage
+        )
 
         # Contacts
         self.contact_storage = self.storage_manager.get_contact_storage()
@@ -106,24 +108,19 @@ class AssistantBot:
                 elif command == "all-contacts":
                     print(self.contacts_commands.all_contacts(args))
                 elif command == "add-note":
-                    print("Adding note...")
-                    print(add_note(args, self.notes_book))
+                    print(self.notes_commands.add_note(args))
                 elif command == "delete-note":
-                    print("Deleting note...")
-                    print(delete_note(args, self.notes_book))
+                    print(self.notes_commands.delete_note(args))
                 elif command == "find-note":
-                    print("Finding note...")
-                    print(find_note(args, self.notes_book))
+                    print(self.notes_commands.find_note(args))
                 elif command == "edit-note":
-                    print("Editing note...")
-                    print(edit_note(args, self.notes_book))
+                    print(self.notes_commands.edit_note(args))
                 elif command == "add-tag":
                     print("Adding tag...")
                 elif command == "remove-tag":
                     print("Removing tag...")
                 elif command == "all-notes":
-                    print("Showing all notes...")
-                    print(self.notes_book)
+                    print(self.notes_commands.all_notes(args))
                 else:
                     suggested_command = self._suggest_command(user_input)
 
@@ -157,25 +154,20 @@ class AssistantBot:
                             print(self.contacts_commands.upcoming_birthdays(args))
                         elif command == "all-contacts":
                             print(self.contacts_commands.all_contacts(args))
-                        elif suggested_command == "add-note":
-                            print("Adding note...")
-                            print(add_note(args, self.notes_book))
-                        elif suggested_command == "delete-note":
-                            print("Deleting note...")
-                            print(delete_note(args, self.notes_book))
-                        elif suggested_command == "find-note":
-                            print("Finding note...")
-                            print(find_note(args, self.notes_book))
-                        elif suggested_command == "edit-note":
-                            print("Editing note...")
-                            print(edit_note(args, self.notes_book))
+                        elif command == "add-note":
+                            print(self.notes_commands.add_note(args))
+                        elif command == "delete-note":
+                            print(self.notes_commands.delete_note(args))
+                        elif command == "find-note":
+                            print(self.notes_commands.find_note(args))
+                        elif command == "edit-note":
+                            print(self.notes_commands.edit_note(args))
                         elif suggested_command == "add-tag":
                             print("Adding tag...")
                         elif suggested_command == "remove-tag":
                             print("Removing tag...")
                         elif suggested_command == "all-notes":
-                            print("Showing all notes...")
-                            print(self.notes_book)
+                            print(self.notes_commands.all_notes(args))
                     else:
                         print("Unknown command. Try typing 'hello' for help.")
             except KeyboardInterrupt:
