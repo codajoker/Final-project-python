@@ -2,6 +2,7 @@ import pickle
 import os
 from src.storage.storage_interface import StorageInterface
 from src.config.constants import CONTACTS_FILE, NOTES_FILE
+from builtins import open
 
 
 class Storage(StorageInterface):
@@ -14,8 +15,8 @@ class Storage(StorageInterface):
         self.file_path = self._get_file_path(file_type)
         self.data = None
 
-    def __del__(self):
-        self.save_data()
+    # def __del__(self):
+    #     self.save_data()
 
     def _get_file_path(self, file_type):
         if file_type not in self.FILE_PATHS:

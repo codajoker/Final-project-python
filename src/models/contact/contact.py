@@ -7,7 +7,6 @@ from src.models.contact.phone import Phone
 from src.models.contact.email import Email
 from src.models.contact.birthday import Birthday
 from src.models.contact.adress import Adress
-from src.models.contact.comments import Comments
 
 
 class Contact:
@@ -17,23 +16,19 @@ class Contact:
         phones=[],
         email="",
         birthday=None,
-        adress="",
+        address="",
     ):
         self.name = Name(name)
         self.phones = phones
         self.birthday = birthday
         self.email = email
-        self.adress = adress
-        self.comments = comments
+        self.address = address
 
     def add_birthday(self, birthdate):
         self.birthday = Birthday(birthdate)
 
-    def add_adress(self, adress):
-        self.adress = Adress(adress)
-
-    def add_comments(self, comments):
-        self.comments = Comments(comments)
+    def add_address(self, address):
+        self.address = Adress(address)
 
     def get_name(self):
         return self.name.value
@@ -65,7 +60,13 @@ class Contact:
         return find_element(self.email, lambda x: x.value == email)
 
     def __repr__(self):
-        return f"Record({self.name.value}, {self.phones}, {self.birthday} , {self.email}, {self.adress}, {self.comments})"
+        return f"Record({self.name.value}, {self.phones}, {self.birthday} , {self.email}, {self.address})"
 
     def __str__(self):
-        return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones) , self.birthday, self.email, self.adress, self.comments}"
+        birthday_str = (
+            self.birthday.value.strftime("%d.%m.%Y") if self.birthday else "N/A"
+        )
+        email_str = str(self.email) if self.email else "N/A"
+        address_str = str(self.address) if self.address else "N/A"
+        phones_str = "; ".join(p.value for p in self.phones) if self.phones else "N/A"
+        return f"Contact name: {self.name.value}, phones: {phones_str}, birthday: {birthday_str}, email: {email_str}, address: {address_str}"
