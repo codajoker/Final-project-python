@@ -18,6 +18,9 @@ class NoteCommands:
         if len(args) < 1:
             return "Usage: find-note [title]"
 
+        if len(args[0]) < 2 or len(args[0]) > 63:
+            return "Note title should have from 2 to 63 characters."
+
         title = args[0]
         note = self.service.find_note(title)
 
@@ -34,11 +37,14 @@ class NoteCommands:
     def delete_note(self, args):
         if len(args) < 1:
             return "Usage: delete-note [title]"
+        
+        if len(args[0]) < 2 or len(args[0]) > 63:
+            return "Note title should have from 2 to 63 characters."
 
         title = args[0]
         return self.service.delete_note(title)
     
-    def all_notes(self, args):
+    def all_notes(self):
         notes = self.service.get_all_notes()
         if not len(notes):
             return "No notes found."

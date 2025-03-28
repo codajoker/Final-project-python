@@ -120,7 +120,7 @@ class AssistantBot:
                 elif command == "remove-tag":
                     print("Removing tag...")
                 elif command == "all-notes":
-                    print(self.notes_commands.all_notes(args))
+                    print(self.notes_commands.all_notes())
                 else:
                     suggested_command = self._suggest_command(user_input)
 
