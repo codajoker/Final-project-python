@@ -22,3 +22,7 @@ class StorageManager:
 
     def get_note_storage(self):
         return self.note_storage
+
+    def save_all(self):
+        self.contact_storage.save_data()
+        self.note_storage.save_data()
