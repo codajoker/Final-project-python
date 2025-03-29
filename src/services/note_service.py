@@ -68,5 +68,24 @@ class NoteService:
         else:
             return f"Note '{title}' was not found."
         
+    def add_tag(self, title, tag):
+        note = self.note_book.find_note(title)
+
+        if not note:
+            return f"Note '{title}' was not found."
+
+        try:
+            return self.note_book.add_tag(title, tag)
+        except TypeError as e:
+            return str(e)
+        
+    def remove_tag(self, title, tag):
+        note = self.note_book.find_note(title)
+
+        if not note:
+            return f"Note '{title}' was not found."
+
+        return self.note_book.remove_tag(title, tag)
+
     def get_all_notes(self):
         return self.note_book.data
