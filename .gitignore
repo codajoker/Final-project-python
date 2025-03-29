@@ -174,4 +174,5 @@ cython_debug/
 .pypirc
 
 # Storage
+data/
 *.dat

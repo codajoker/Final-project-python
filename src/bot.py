@@ -116,9 +116,9 @@ class AssistantBot:
                 elif command == "edit-note":
                     print(self.notes_commands.edit_note(args))
                 elif command == "add-tag":
-                    print("Adding tag...")
+                    print(self.notes_commands.add_tag(args))
                 elif command == "remove-tag":
-                    print("Removing tag...")
+                    print(self.notes_commands.remove_tag(args))
                 elif command == "all-notes":
                     print(self.notes_commands.all_notes())
                 else:
@@ -163,9 +163,9 @@ class AssistantBot:
                         elif command == "edit-note":
                             print(self.notes_commands.edit_note(args))
                         elif suggested_command == "add-tag":
-                            print("Adding tag...")
+                            print(self.notes_commands.add_tag(args))
                         elif suggested_command == "remove-tag":
-                            print("Removing tag...")
+                            print(self.notes_commands.remove_tag(args))
                         elif suggested_command == "all-notes":
                             print(self.notes_commands.all_notes(args))
                     else:

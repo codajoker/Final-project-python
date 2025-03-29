@@ -44,12 +44,26 @@ class NoteCommands:
         title = args[0]
         return self.service.delete_note(title)
     
+    def add_tag(self, args):
+        if len(args) < 2:
+            return "Usage: add-tag [title] [tag]"
+
+        title, tag = args
+        return self.service.add_tag(title, tag)
+    
+    def remove_tag(self, args):
+        if len(args) < 2:
+            return "Usage: remove-tag [title] [tag]"
+
+        title, tag = args
+        return self.service.remove_tag(title, tag)
+
     def all_notes(self):
         notes = self.service.get_all_notes()
         if not len(notes):
             return "No notes found."
 
         result = "All notes:\n"
-        for note in notes:
-            result += f"{note}\n"
+        for idx, note in enumerate(notes):
+            result += f"{idx + 1}.  {note}\n"
         return result

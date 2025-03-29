@@ -26,6 +26,14 @@ class NoteBook(UserList):
         
     def find_note(self, title):
         return self._find_element(title)
+    
+    def add_tag(self, title, tag):
+        node = self._find_element(title)
+        return node.add_tag(tag)
+
+    def remove_tag(self, title, tag):
+        node = self._find_element(title)
+        return node.remove_tag(tag)
 
     def __str__(self):
         return "\n".join(f"{idx + 1}. {str(note)}" for idx, note in enumerate(self.data))
