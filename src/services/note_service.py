@@ -1,6 +1,6 @@
+from src.models.notes.note import Note
 from src.models.notes.title import Title
 from src.models.notes.text import Text
-from src.models.notes.note import Note
 
 
 class NoteService:
@@ -9,21 +9,17 @@ class NoteService:
         self.storage = storage
 
     def add_note(self, title, text):
-        try:
-            if self.note_book.find_note(title):
-                return f"Note '{title}' already exists. Use 'edit-note' to modify it."
-            
-            note = Note(title, text)
-            self.note_book.add_note(note)
-            self.storage.add(note)
-            return f"Note '{title}' was added successfully."
-        except TypeError as e:
-            return str(e)
+        if self.note_book.find_note(title):
+            return f"Note '{title}' already exists. Use 'edit-note' to modify it."
 
-    
+        note = Note(title, text)
+        self.note_book.add_note(note)
+        self.storage.add(note)  # Persist
+        return f"Note '{title}' was added successfully."
+
     def find_note(self, title):
         return self.note_book.find_note(title)
-    
+
     def edit_note(self, title, field, new_value):
         note = self.note_book.find_note(title)
         if not note:
@@ -42,15 +38,15 @@ class NoteService:
                 self.note_book.add_note(note)
 
             elif field == "text":
-                note.text.value = Text(new_value)
+                note.text = Text(new_value)
                 self.note_book.delete_note(title)
                 self.note_book.add_note(note)
-
             else:
                 return f"Unknown field '{field}'. Available fields: title, text."
 
+            # Persist changes
             self.storage.update(old_note, note)
-            return f"{field.capitalize()} was updated for contact '{title}'."
+            return f"{field.capitalize()} was updated for note '{title}'."
 
         except ValueError as e:
             return f"Error updating {field}: {e}"
@@ -58,15 +54,15 @@ class NoteService:
             return str(e)
         except TypeError as e:
             return str(e)
-    
+
     def delete_note(self, title):
         note = self.note_book.find_note(title)
         if note:
             self.note_book.delete_note(title)
-            self.storage.remove(title)
+            self.storage.remove(note)  # Use the Note object, not the title
             return f"Note '{title}' was deleted successfully."
         else:
             return f"Note '{title}' was not found."
-        
+
     def get_all_notes(self):
         return self.note_book.data

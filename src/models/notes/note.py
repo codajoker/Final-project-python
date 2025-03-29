@@ -7,6 +7,11 @@ class Note:
         self.title = Title(title)
         self.text = Text(text)
 
+    def __eq__(self, other):
+        if not isinstance(other, Note):
+            return False
+        return self.title.value == other.title.value
+
     def __repr__(self):
         return f"Note({self.title.value}, {self.text.value})"
 

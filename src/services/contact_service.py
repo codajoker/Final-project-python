@@ -1,5 +1,5 @@
 from src.models.contact.contact import Contact
-from datetime import datetime, timedelta
+from datetime import datetime
 
 
 class ContactService:
@@ -46,20 +46,16 @@ class ContactService:
         if not contact:
             return f"Contact '{name}' not found."
 
-        # Save old object reference for the update call below
         old_contact = contact
 
         try:
             if field == "name":
                 old_name = contact.get_name()
                 contact.name.value = new_value
-                # Remove the old record in the address book
                 self.address_book.delete(old_name)
-                # Add the updated record using the new name
                 self.address_book.add_record(contact)
 
             elif field == "phone":
-                # Simplistic approach: remove the first phone, add new
                 if contact.phones:
                     contact.phones.pop(0)
                 contact.add_phone(new_value)
@@ -74,9 +70,11 @@ class ContactService:
                 contact.add_address(new_value)
 
             else:
-                return f"Unknown field '{field}'. Available fields: name, phone, email, birthday, address."
+                return (
+                    "Unknown field '{field}'. "
+                    "Available fields: name, phone, email, birthday, address."
+                )
 
-            # Persist changes to storage
             self.storage.update(old_contact, contact)
             return f"{field.capitalize()} updated for contact '{name}'."
 
@@ -100,7 +98,6 @@ class ContactService:
         try:
             old_contact = contact
             contact.add_birthday(birthday)
-            # Force an update so it's persisted
             self.storage.update(old_contact, contact)
             return f"Birthday added/updated for contact '{name}'."
         except ValueError as e:
@@ -124,23 +121,20 @@ class ContactService:
         for name, contact in self.address_book.data.items():
             birthday_str = contact.get_birthday()
             if birthday_str:
-                # contact.get_birthday() returns a date object if everything was parsed
-                # or a string if you store it differently. Here, we store it as date obj:
-                if isinstance(birthday_str, str):
-                    # If you store birthdays as strings
+                if not isinstance(birthday_str, str):
+                    birthday_date = birthday_str
+                else:
                     try:
-                        bday_date = datetime.strptime(birthday_str, "%d.%m.%Y").date()
+                        birthday_date = datetime.strptime(
+                            birthday_str, "%d.%m.%Y"
+                        ).date()
                     except ValueError:
                         continue
-                else:
-                    # If it's already a date object (per the Birthday field)
-                    bday_date = birthday_str
 
-                # This year's upcoming birthday
-                bday_this_year = bday_date.replace(year=today.year)
-                delta = (bday_this_year - today.date()).days
+                birthday_this_year = birthday_date.replace(year=today.year)
+                delta = (birthday_this_year - today.date()).days
                 if 0 <= delta <= days:
-                    upcoming.append(f"{name}: {bday_date.strftime('%d.%m.%Y')}")
+                    upcoming.append(f"{name}: {birthday_date.strftime('%d.%m.%Y')}")
 
         if not upcoming:
             return ["No upcoming birthdays."]
