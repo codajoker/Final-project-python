@@ -23,9 +23,11 @@ class NoteBook(UserList):
 
     def delete_note(self, title):
         self.data = list(filter(lambda x: x.title.value != title, self.data))
-        
+
     def find_note(self, title):
         return self._find_element(title)
 
     def __str__(self):
-        return "\n".join(f"{idx + 1}. {str(note)}" for idx, note in enumerate(self.data))
+        return "\n".join(
+            f"{idx + 1}. {str(note)}" for idx, note in enumerate(self.data)
+        )

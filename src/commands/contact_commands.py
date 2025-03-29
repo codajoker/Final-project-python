@@ -80,12 +80,12 @@ class ContactCommands:
         else:
             return f"No upcoming birthdays in the next {days} days."
 
-    def all_contacts(self, args):
+    def all_contacts(self, *args):
         contacts = self.service.get_all_contacts()
         if not contacts:
             return "No contacts found."
 
         result = "All contacts:\n"
         for name, contact in contacts.items():
-            result += f"{name}: {contact}\n"
+            result += f"{contact}\n"
         return result

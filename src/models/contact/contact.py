@@ -24,6 +24,11 @@ class Contact:
         self.email = email
         self.address = address
 
+    def __eq__(self, other):
+        if not isinstance(other, Contact):
+            return False
+        return self.name.value == other.name.value
+
     def add_birthday(self, birthdate):
         self.birthday = Birthday(birthdate)
 
